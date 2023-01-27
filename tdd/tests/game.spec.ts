@@ -12,12 +12,19 @@ class BowlingCalculator {
     let sum: number = 0
 
     for (let index = 0; index < Math.min(this.pinList.length, this.totalPinsPerFrame * 2); index += 2) {
-      const frameScore = this.pinList[index] + this.pinList[index + 1]
-      sum += frameScore
-      if (this.pinList[index] === this.totalPinsPerFrame) sum += this.pinList[index + 2] + this.pinList[index + 3]
-      else if (frameScore === this.totalPinsPerFrame) sum += this.pinList[index + 2]
+      sum += this.pinList[index] + this.pinList[index + 1]
+      if (this.isStrike(index)) sum += this.pinList[index + 2] + (this.isStrike(index + 2) ? this.pinList[index + 4] : this.pinList[index + 3]);
+      else if (this.isSpare(index)) sum += this.pinList[index + 2]
     }
     return sum
+  }
+
+  private isSpare(index: number) {
+    return this.pinList[index] + this.pinList[index + 1] === this.totalPinsPerFrame
+  }
+
+  private isStrike(index: number) {
+    return this.pinList[index] === this.totalPinsPerFrame
   }
 }
 
@@ -70,7 +77,7 @@ describe('Bowling score', () => {
     expect(score).toBe(13)
   })
 
-  it('should strike !!!!', () => {
+  it('should add 2 next roll for a strike', () => {
     const bowling = new BowlingCalculator()
 
     bowling.roll(10)
@@ -81,6 +88,32 @@ describe('Bowling score', () => {
     const score = bowling.score()
 
     expect(score).toBe(28)
+  })
+
+  it('should add 2 bonus roll for a strike on last frame', () => {
+    const bowling = new BowlingCalculator()
+
+    rollTimesInGutter(18, bowling)
+    bowling.roll(10)
+    bowling.roll(1)
+    bowling.roll(8)
+
+    const score = bowling.score()
+
+    expect(score).toBe(19)
+  })
+
+  it('should', () => {
+    const bowling = new BowlingCalculator()
+
+    bowling.roll(10)
+    bowling.roll(10)
+    bowling.roll(10)
+    rollTimesInGutter(14, bowling)
+
+    const score = bowling.score()
+
+    expect(score).toBe(60)
   })
 })
 
