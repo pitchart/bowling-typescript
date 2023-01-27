@@ -1,7 +1,22 @@
+class BowlingCalculator {
+  roll (number: number): void {
 
-describe('Bowling game', () => {
-  it('should do something when pins fall', () => {
-    expect('No, let\'s start writing a test!')
-      .toBe('Let\'s write production code')
+  }
+
+  score (): number {
+    return 0
+  }
+}
+
+describe('Bowling score', () => {
+  it('should be 0 when all rolls go into gutters', () => {
+    const bowling = new BowlingCalculator()
+
+    for (let i = 0; i < 20; i++) {
+      bowling.roll(0)
+    }
+    const score = bowling.score()
+
+    expect(score).toBe(0)
   })
 })
