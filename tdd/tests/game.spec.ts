@@ -5,6 +5,7 @@ class BowlingCalculator {
 
   roll (pins: number): void {
     this.pinList.push(pins)
+    if (pins === this.totalPinsPerFrame) this.pinList.push(0)
   }
 
   score (): number {
@@ -13,7 +14,8 @@ class BowlingCalculator {
     for (let index = 0; index < Math.min(this.pinList.length, this.totalPinsPerFrame * 2); index += 2) {
       const frameScore = this.pinList[index] + this.pinList[index + 1]
       sum += frameScore
-      if (frameScore === this.totalPinsPerFrame) sum += this.pinList[index + 2]
+      if (this.pinList[index] === this.totalPinsPerFrame) sum += this.pinList[index + 2] + this.pinList[index + 3]
+      else if (frameScore === this.totalPinsPerFrame) sum += this.pinList[index + 2]
     }
     return sum
   }
@@ -66,6 +68,19 @@ describe('Bowling score', () => {
     const score = bowling.score()
 
     expect(score).toBe(13)
+  })
+
+  it('should strike !!!!', () => {
+    const bowling = new BowlingCalculator()
+
+    bowling.roll(10)
+    bowling.roll(1)
+    bowling.roll(8)
+    rollTimesInGutter(16, bowling)
+
+    const score = bowling.score()
+
+    expect(score).toBe(28)
   })
 })
 
