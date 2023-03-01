@@ -1,11 +1,25 @@
 export class Game {
-  private _score: number = 0
+  private readonly rolls: number[] = []
 
   roll (pins: number): void {
-    this._score += pins
+    this.rolls.push(pins)
   }
 
   get score (): number {
-    return this._score
+    let score = 0
+    for (let i = 0; i < 10; i++) {
+      const firstRoll = this.rolls[2 * i]
+      const secondRoll = this.rolls[2 * i + 1]
+      const scoreOfTurn = firstRoll + secondRoll
+      score += scoreOfTurn
+      if (this.isSpare(firstRoll, secondRoll)) {
+        score += this.rolls[2 * i + 2]
+      }
+    }
+    return score
+  }
+
+  private isSpare (firstRoll: number, secondRoll: number): boolean {
+    return firstRoll + secondRoll === 10 && firstRoll !== 10
   }
 }

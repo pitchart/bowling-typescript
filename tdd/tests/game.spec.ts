@@ -1,4 +1,4 @@
-import { Game } from '../src/game';
+import { Game } from '../src/game'
 
 describe('Bowling game score', () => {
   it('should be 0 when all rolls went into the gutter', () => {
@@ -17,5 +17,20 @@ describe('Bowling game score', () => {
       game.roll(1)
     }
     expect(game.score).toBe(20)
+  })
+
+  it('should handle spare case', () => {
+    const game = new Game()
+
+    game.roll(2)
+    game.roll(8)
+    game.roll(4)
+
+    const numberOfRolls = 17
+    for (let i = 0; i < numberOfRolls; i++) {
+      game.roll(2)
+    }
+
+    expect(game.score).toBe(52)
   })
 })
