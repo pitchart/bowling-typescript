@@ -1,7 +1,12 @@
+import { Game } from '../src/game';
 
-describe('Bowling game', () => {
-  it('should do something when pins fall', () => {
-    expect('No, let\'s start writing a test!')
-      .toBe('Let\'s write production code')
+describe('Bowling game score', () => {
+  it('should be 0 when all rolls went into the gutter', () => {
+    const game = new Game()
+    const numberOfRolls = 20
+    for (let i = 0; i < numberOfRolls; i++) {
+      game.roll(0)
+    }
+    expect(game.score).toBe(0)
   })
 })
